@@ -1,4 +1,5 @@
 import Image from "next/image";
+import BlackhornCarousel from "./blackhorn-carousel";
 
 const navigation = [
   { label: "Home", href: "#top" },
@@ -180,14 +181,17 @@ export default function Home() {
         </section>
 
         <section id="about" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">Why Blackhorn</p>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Reliable security support for businesses, properties, and communities.
-            </h2>
-            <p className="mt-5 text-lg leading-8 text-slate-300">
-              Blackhorn Security provides professional security services for properties and operations that need a credible, visible, and dependable presence. Our approach is built around professionalism, visibility, and practical security solutions tailored to the needs of each client.
-            </p>
+          <div className="grid items-center gap-10 md:grid-cols-[1.08fr_0.92fr] lg:gap-12">
+            <div className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">Why Blackhorn</p>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                Reliable security support for businesses, properties, and communities.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-300">
+                Blackhorn Security provides professional security services for properties and operations that need a credible, visible, and dependable presence. Our approach is built around professionalism, visibility, and practical security solutions tailored to the needs of each client.
+              </p>
+            </div>
+            <BlackhornCarousel />
           </div>
         </section>
 
@@ -225,21 +229,32 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-10 lg:flex-row lg:items-center">
-            <div className="lg:w-1/2">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">Our Approach</p>
-              <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Security that is professional, visible, and dependable.
-              </h2>
-            </div>
-            <div className="grid gap-6 lg:w-1/2">
-              {keyPoints.map((point) => (
-                <div key={point.title} className="rounded-2xl border border-white/10 bg-[#0B0F14] p-5">
-                  <h3 className="text-xl font-semibold text-white">{point.title}</h3>
-                  <p className="mt-2 text-base leading-7 text-slate-300">{point.description}</p>
-                </div>
-              ))}
+        <section className="relative isolate overflow-hidden py-20">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -z-10 bg-cover bg-no-repeat bg-[position:72%_center] md:bg-[position:62%_center]"
+            style={{ backgroundImage: "url('/blackhorn-approach.png')" }}
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[#05070A]/15 bg-[linear-gradient(180deg,rgba(5,7,10,0.26)_0%,rgba(5,7,10,0.12)_38%,transparent_66%)] md:bg-[radial-gradient(ellipse_at_22%_46%,rgba(5,7,10,0.22)_0%,rgba(5,7,10,0.12)_42%,transparent_72%)]"
+          />
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-10 lg:flex-row lg:items-center">
+              <div className="lg:w-1/2">
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">Our Approach</p>
+                <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                  Security that is professional, visible, and dependable.
+                </h2>
+              </div>
+              <div className="grid gap-6 lg:w-1/2">
+                {keyPoints.map((point) => (
+                  <div key={point.title} className="rounded-2xl border border-white/10 bg-[#0B0F14] p-5">
+                    <h3 className="text-xl font-semibold text-white">{point.title}</h3>
+                    <p className="mt-2 text-base leading-7 text-slate-300">{point.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -471,12 +486,19 @@ export default function Home() {
         </div>
 
         <div className="border-t border-white/10 py-5">
-          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 text-sm text-slate-400 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+          <div className="mx-auto max-w-7xl px-4 text-sm text-slate-400 sm:px-6 lg:px-8">
             <p>© 2026 Blackhorn Security</p>
-            <div className="flex items-center gap-5">
-              <a href="/privacy" className="hover:text-blue-300">Privacy Policy</a>
-              <a href="/terms" className="hover:text-blue-300">Terms</a>
-            </div>
+            <p className="mt-4 text-center text-xs text-slate-500 sm:text-right">
+              Website designed &amp; developed by{" "}
+              <a
+                href="https://www.linkedin.com/in/raul-montalvo-49a747402/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-sm text-slate-400 transition-colors hover:text-blue-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+              >
+                Raul Montalvo · LinkedIn
+              </a>
+            </p>
           </div>
         </div>
       </footer>

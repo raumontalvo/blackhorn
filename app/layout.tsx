@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "Blackhorn Security | Professional Security Services in Southwest Florida",
   description:
     "Blackhorn Security provides professional armed, unarmed, and mobile patrol security services throughout Naples, Fort Myers, and Southwest Florida.",
+  icons: {
+    icon: "/homej.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

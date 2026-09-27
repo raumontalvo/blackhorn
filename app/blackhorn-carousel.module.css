@@ -1,0 +1,19 @@
+.photoEnter {
+  animation: photo-enter 350ms ease-out both;
+}
+
+@keyframes photo-enter {
+  from {
+    opacity: 0.65;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photoEnter {
+    animation: none;
+  }
+}
