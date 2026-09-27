@@ -18,6 +18,8 @@ export const metadata: Metadata = {
     "Blackhorn Security provides professional armed, unarmed, and mobile patrol security services throughout Naples, Fort Myers, and Southwest Florida.",
   icons: {
     icon: "/homej.png",
+    shortcut: "/homej.png",
+    apple: "/homej.png",
   },
 };
 

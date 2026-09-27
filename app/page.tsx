@@ -1,5 +1,6 @@
 import Image from "next/image";
 import BlackhornCarousel from "./blackhorn-carousel";
+import MobileNavigation from "./mobile-navigation";
 
 const navigation = [
   { label: "Home", href: "#top" },
@@ -77,7 +78,7 @@ export default function Home() {
             />
           </a>
 
-          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-200 md:flex">
+          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-200 lg:flex">
             {navigation.map((item) => (
               <a
                 key={item.label}
@@ -91,7 +92,7 @@ export default function Home() {
             ))}
           </nav>
 
-          <div className="hidden items-center gap-4 md:flex">
+          <div className="hidden items-center gap-4 lg:flex">
             <a
               href="tel:2392048938"
               className="text-sm font-medium text-slate-200 transition-colors hover:text-blue-400"
@@ -106,13 +107,7 @@ export default function Home() {
             </a>
           </div>
 
-          <button
-            type="button"
-            aria-label="Open menu"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white md:hidden"
-          >
-            ☰
-          </button>
+          <MobileNavigation items={navigation} />
         </div>
       </header>
 
