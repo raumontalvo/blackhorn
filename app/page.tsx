@@ -2,6 +2,7 @@ import BlackhornCarousel from "./blackhorn-carousel";
 import Link from "next/link";
 import SiteHeader from "./site-header";
 import SiteFooter from "./site-footer";
+import QuoteForm from "./quote-form";
 import { services, serviceAreas } from "./site-data";
 
 const industries = [
@@ -320,7 +321,7 @@ export default function Home() {
                   Tell us about your security needs.
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-slate-300">
-                  Share your property details, service needs, and preferred timeline. This form is frontend-only for now and will be connected to a backend solution once the intake process is defined.
+                  Share your property details, service needs, and preferred timeline. Our team will follow up shortly.
                 </p>
                 <div className="mt-8 space-y-4 text-slate-300">
                   <p>Call: <a href="tel:2392048938" className="font-semibold text-blue-400 hover:text-blue-300">(239) 204-8938</a></p>
@@ -329,57 +330,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <form className="rounded-[28px] border border-white/10 bg-[#0A1628] p-6 sm:p-8">
-                <div className="grid gap-5 md:grid-cols-2">
-                  <div>
-                    <label htmlFor="fullName" className="mb-2 block text-sm font-medium text-slate-200">Full Name</label>
-                    <input id="fullName" type="text" className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Your full name" />
-                  </div>
-                  <div>
-                    <label htmlFor="company" className="mb-2 block text-sm font-medium text-slate-200">Company / Organization</label>
-                    <input id="company" type="text" className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Company or organization" />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="mb-2 block text-sm font-medium text-slate-200">Phone Number</label>
-                    <input id="phone" type="tel" className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="(239) 204-8938" />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-200">Email Address</label>
-                    <input id="email" type="email" className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="name@email.com" />
-                  </div>
-                  <div>
-                    <label htmlFor="service" className="mb-2 block text-sm font-medium text-slate-200">Service Needed</label>
-                    <input id="service" type="text" className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Armed Security" />
-                  </div>
-                  <div>
-                    <label htmlFor="siteType" className="mb-2 block text-sm font-medium text-slate-200">Property / Site Type</label>
-                    <input id="siteType" type="text" className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Commercial property" />
-                  </div>
-                  <div>
-                    <label htmlFor="city" className="mb-2 block text-sm font-medium text-slate-200">City</label>
-                    <input id="city" type="text" className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Naples" />
-                  </div>
-                  <div>
-                    <label htmlFor="startDate" className="mb-2 block text-sm font-medium text-slate-200">Desired Start Date</label>
-                    <input id="startDate" type="date" className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white focus:border-blue-500 focus:outline-none" />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label htmlFor="coverage" className="mb-2 block text-sm font-medium text-slate-200">Estimated Coverage / Hours</label>
-                    <input id="coverage" type="text" className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="e.g. 12 hours / 7 days a week" />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label htmlFor="message" className="mb-2 block text-sm font-medium text-slate-200">Message / Security Needs</label>
-                    <textarea id="message" rows={5} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Tell us about the property, your security concerns, and services needed." />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#1473E6] px-6 py-3 text-base font-semibold text-white shadow-[0_14px_35px_rgba(20,115,230,0.35)] transition hover:bg-[#2589FF]"
-                >
-                  Submit Request
-                </button>
-              </form>
+              <QuoteForm />
             </div>
           </div>
         </section>
