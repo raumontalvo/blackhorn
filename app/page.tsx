@@ -1,26 +1,8 @@
-import Image from "next/image";
 import BlackhornCarousel from "./blackhorn-carousel";
-import MobileNavigation from "./mobile-navigation";
-
-const navigation = [
-  { label: "Home", href: "#top" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Service Areas", href: "#service-areas" },
-  { label: "Contact", href: "#contact" },
-  { label: "Request a Quote", href: "#request-quote" },
-];
-
-const services = [
-  { name: "Armed Security", summary: "Visible, professional protection for properties and facilities that require an elevated security presence.", badge: "A" },
-  { name: "Unarmed Security", summary: "Trusted front-line security for offices, retail locations, and commercial properties.", badge: "U" },
-  { name: "Mobile Patrol", summary: "Routine checks and visible security presence for properties, communities, and construction sites.", badge: "MP" },
-  { name: "Commercial Security", summary: "Security coverage designed for businesses, office spaces, and multi-site operations.", badge: "C" },
-  { name: "Residential / HOA Security", summary: "Professional monitoring and patrol support for residential communities and HOA-managed properties.", badge: "R" },
-  { name: "Construction Site Security", summary: "Deterrence, access control, and patrol support for active job sites and restricted areas.", badge: "CS" },
-  { name: "Event Security", summary: "Security plans that support organized events with smooth guest flow and visible oversight.", badge: "E" },
-  { name: "Retail Security", summary: "Loss prevention support and customer-focused security for retail environments.", badge: "RS" },
-];
+import Link from "next/link";
+import SiteHeader from "./site-header";
+import SiteFooter from "./site-footer";
+import { services, serviceAreas } from "./site-data";
 
 const industries = [
   "Commercial Properties",
@@ -51,65 +33,10 @@ const keyPoints = [
   },
 ];
 
-const serviceAreas = [
-  {
-    name: "Naples",
-    description: "Professional security services for commercial, residential, and private property environments in Naples.",
-  },
-  {
-    name: "Fort Myers",
-    description: "Security coverage and patrol services designed for properties and businesses throughout Fort Myers.",
-  },
-];
-
 export default function Home() {
   return (
     <div id="top" className="min-h-screen bg-[#05070A] text-white">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#05070A]/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-          <a href="#top" className="flex items-center gap-3" aria-label="Blackhorn Security home">
-            <Image
-              src="/homej.png"
-              alt="Blackhorn Security logo"
-              width={180}
-              height={180}
-              priority
-              className="h-16 w-auto object-contain sm:h-20"
-            />
-          </a>
-
-          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-200 lg:flex">
-            {navigation.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className={`transition-colors hover:text-blue-400 ${
-                  item.label === "Request a Quote" ? "text-blue-400" : ""
-                }`}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="hidden items-center gap-4 lg:flex">
-            <a
-              href="tel:2392048938"
-              className="text-sm font-medium text-slate-200 transition-colors hover:text-blue-400"
-            >
-              (239) 204-8938
-            </a>
-            <a
-              href="#request-quote"
-              className="inline-flex items-center justify-center rounded-full bg-[#1473E6] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(20,115,230,0.35)] transition hover:bg-[#2589FF]"
-            >
-              Request a Quote
-            </a>
-          </div>
-
-          <MobileNavigation items={navigation} />
-        </div>
-      </header>
+      <SiteHeader />
 
       <main>
         <section className="relative isolate overflow-hidden border-b border-white/10">
@@ -185,6 +112,25 @@ export default function Home() {
               <p className="mt-5 text-lg leading-8 text-slate-300">
                 Blackhorn Security provides professional security services for properties and operations that need a credible, visible, and dependable presence. Our approach is built around professionalism, visibility, and practical security solutions tailored to the needs of each client.
               </p>
+              <a
+                href="https://youtu.be/mTthIMjNGKQ"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group mt-7 inline-flex items-center gap-3 rounded-full border border-blue-500/40 bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(20,115,230,0.25)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-400 hover:shadow-[0_18px_40px_rgba(20,115,230,0.35)] sm:text-base"
+              >
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 transition group-hover:bg-white/25">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="h-4 w-4 text-white"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
+                <span>Watch Blackhorn Security in Action</span>
+              </a>
             </div>
             <BlackhornCarousel />
           </div>
@@ -215,9 +161,9 @@ export default function Home() {
                   </div>
                   <h3 className="mt-6 text-xl font-semibold text-white">{service.name}</h3>
                   <p className="mt-3 text-sm leading-7 text-slate-300">{service.summary}</p>
-                  <a href="#request-quote" className="mt-5 inline-flex text-sm font-semibold text-blue-400 transition group-hover:text-blue-300">
+                  <Link href={`/services/${service.slug}`} className="mt-5 inline-flex text-sm font-semibold text-blue-400 transition group-hover:text-blue-300">
                     Learn More →
-                  </a>
+                  </Link>
                 </article>
               ))}
             </div>
@@ -322,15 +268,22 @@ export default function Home() {
 
             <div className="mt-10 grid gap-6 md:grid-cols-2">
               {serviceAreas.map((area) => (
-                <div key={area.name} className="rounded-3xl border border-white/10 bg-[#0A1628] p-7">
+                <Link
+                  key={area.name}
+                  href={`/service-areas/${area.slug}`}
+                  className="group rounded-3xl border border-white/10 bg-[#0A1628] p-7 transition duration-200 hover:border-blue-500/60 hover:-translate-y-1"
+                >
                   <div className="flex items-center justify-between gap-4">
                     <h3 className="text-2xl font-semibold text-white">{area.name}</h3>
                     <span className="rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-blue-300">
                       Local
                     </span>
                   </div>
-                  <p className="mt-4 text-base leading-7 text-slate-300">{area.description}</p>
-                </div>
+                  <p className="mt-4 text-base leading-7 text-slate-300">{area.summary}</p>
+                  <span className="mt-5 inline-flex text-sm font-semibold text-blue-400 transition group-hover:text-blue-300">
+                    View {area.name} →
+                  </span>
+                </Link>
               ))}
             </div>
           </div>
@@ -432,71 +385,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer id="contact" className="border-t border-white/10 bg-[#05070A]">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.3fr_0.9fr_0.8fr_0.8fr] lg:px-8">
-          <div>
-            <Image
-              src="/homej.png"
-              alt="Blackhorn Security logo"
-              width={160}
-              height={160}
-              className="h-14 w-auto object-contain"
-            />
-            <h3 className="mt-4 text-2xl font-bold text-white">Blackhorn Security</h3>
-            <p className="mt-4 max-w-sm text-sm leading-7 text-slate-300">
-              Professional security services for businesses, properties, communities, and events throughout Southwest Florida.
-            </p>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">Company</h4>
-            <ul className="mt-5 space-y-3 text-sm text-slate-300">
-              <li><a href="#about" className="hover:text-blue-300">About</a></li>
-              <li><a href="#services" className="hover:text-blue-300">Services</a></li>
-              <li><a href="#service-areas" className="hover:text-blue-300">Service Areas</a></li>
-              <li><a href="#contact" className="hover:text-blue-300">Contact</a></li>
-              <li><a href="#request-quote" className="hover:text-blue-300">Request a Quote</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">Contact</h4>
-            <ul className="mt-5 space-y-3 text-sm text-slate-300">
-              <li><a href="tel:2392048938" className="hover:text-blue-300">(239) 204-8938</a></li>
-              <li><a href="mailto:blackhornsecserv@gmail.com" className="hover:text-blue-300">blackhornsecserv@gmail.com</a></li>
-              <li>1232 North Tamiami Trail, Unit #09</li>
-              <li>Florida Security Agency License #B1800337</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">Service Info</h4>
-            <ul className="mt-5 space-y-3 text-sm text-slate-300">
-              <li>Serving Naples, Fort Myers &amp; Southwest Florida</li>
-              <li>24/7 Security Services</li>
-              <li>Instagram: @blackhornsecurityservices</li>
-              <li>Facebook: Blackhorn Security Services</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="border-t border-white/10 py-5">
-          <div className="mx-auto max-w-7xl px-4 text-sm text-slate-400 sm:px-6 lg:px-8">
-            <p>© 2026 Blackhorn Security</p>
-            <p className="mt-4 text-center text-xs text-slate-500 sm:text-right">
-              Website designed &amp; developed by{" "}
-              <a
-                href="https://www.linkedin.com/in/raul-montalvo-49a747402/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-sm text-slate-400 transition-colors hover:text-blue-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
-              >
-                Raul Montalvo · LinkedIn
-              </a>
-            </p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 type NavigationItem = {
@@ -41,7 +42,7 @@ export default function MobileNavigation({ items }: { items: NavigationItem[] })
           className="absolute right-0 top-full z-50 mt-3 w-[calc(100vw-2rem)] max-w-sm rounded-xl border border-white/10 bg-[#05070A] p-2 shadow-[0_20px_50px_rgba(0,0,0,0.55)]"
         >
           {items.map((item) => (
-            <a
+            <Link
               key={item.label}
               href={item.href}
               onClick={() => setIsOpen(false)}
@@ -52,7 +53,7 @@ export default function MobileNavigation({ items }: { items: NavigationItem[] })
               }`}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
       )}
