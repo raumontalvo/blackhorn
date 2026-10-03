@@ -1,5 +1,6 @@
 export const siteUrl = "https://blackhornsecurityservices.com";
 export const businessName = "Blackhorn Security";
+export const linktreeUrl = "https://linktr.ee/blackhornsecurityservices";
 
 export const businessInfo = {
   name: businessName,
@@ -9,10 +10,11 @@ export const businessInfo = {
   addressLine: "1232 North Tamiami Trail, Unit #09",
   license: "Florida Security Agency License #B1800337",
   serviceArea: "Naples, Fort Myers, and Southwest Florida",
-  // Only include profile URLs that are explicitly verified elsewhere on the site (LinkedIn).
+  // Only include profile URLs that are explicitly verified elsewhere on the site.
   // Instagram/Facebook are only referenced as handles/names, not confirmed URLs, so they are omitted here.
   sameAs: [
     "https://www.linkedin.com/in/christian-lepe-blackhorn-security-services-llc-6b3039253",
+    linktreeUrl,
   ],
 };
 

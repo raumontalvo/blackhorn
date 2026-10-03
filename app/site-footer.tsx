@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { linktreeUrl } from "./site-data";
 
 export default function SiteFooter() {
   return (
@@ -56,6 +57,17 @@ export default function SiteFooter() {
                 className="transition hover:text-blue-300"
               >
                 Blackhorn Security
+              </a>
+            </li>
+            <li>
+              Linktree:{" "}
+              <a
+                href={linktreeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition hover:text-blue-300"
+              >
+                Blackhorn Security Services
               </a>
             </li>
           </ul>

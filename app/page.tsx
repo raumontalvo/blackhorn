@@ -255,9 +255,27 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="service-areas" className="border-t border-white/10 bg-[#0B0F14] py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl">
+        <section id="service-areas" className="relative isolate overflow-hidden border-t border-white/10 py-20">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundImage: "url('/bk.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(5, 10, 20, 0.48), rgba(5, 10, 20, 0.64))",
+            }}
+          />
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl [text-shadow:0_2px_6px_rgba(0,0,0,0.85)]">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">Service Areas</p>
               <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 Professional Security Services Across Southwest Florida
@@ -272,7 +290,7 @@ export default function Home() {
                 <Link
                   key={area.name}
                   href={`/service-areas/${area.slug}`}
-                  className="group rounded-3xl border border-white/10 bg-[#0A1628] p-7 transition duration-200 hover:border-blue-500/60 hover:-translate-y-1"
+                  className="group rounded-3xl border border-white/10 bg-[#05070A]/60 p-7 backdrop-blur-[2px] transition duration-200 hover:border-blue-500/60 hover:-translate-y-1"
                 >
                   <div className="flex items-center justify-between gap-4">
                     <h3 className="text-2xl font-semibold text-white">{area.name}</h3>

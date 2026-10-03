@@ -57,9 +57,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/homej.png?v=1",
-    shortcut: "/homej.png?v=1",
-    apple: "/homej.png?v=1",
+    icon: { url: "/favicon.ico", type: "image/x-icon" },
+    apple: "/homej.png",
   },
 };
 
