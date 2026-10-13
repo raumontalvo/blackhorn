@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { validateQuote, type QuoteValues } from "../../quote-validation";
 
 // Destination is server-controlled only — never accepted from the client payload.
 const RECIPIENT_EMAIL = "blackhornquotes@gmail.com";
@@ -17,8 +18,6 @@ const MAX_LENGTHS = {
   coverage: 200,
   message: 5000,
 } as const;
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Minimal in-memory limiter: resets on cold start and isn't shared across serverless instances.
 const rateLimitBuckets = new Map<string, { count: number; windowStart: number }>();
@@ -84,12 +83,13 @@ export async function POST(request: NextRequest) {
   const coverage = clean(data.coverage, MAX_LENGTHS.coverage);
   const message = clean(data.message, MAX_LENGTHS.message);
 
-  if (!fullName || !email || !message) {
-    return NextResponse.json({ ok: false, error: "Missing required fields." }, { status: 400 });
-  }
-
-  if (!EMAIL_REGEX.test(email)) {
-    return NextResponse.json({ ok: false, error: "Invalid email address." }, { status: 400 });
+  const values: QuoteValues = { fullName, company, phone, email, service, siteType, city, startDate, coverage, message };
+  const fieldErrors = validateQuote(values);
+  if (Object.keys(fieldErrors).length > 0) {
+    return NextResponse.json(
+      { ok: false, error: "Please complete all required fields before submitting your request.", fields: fieldErrors },
+      { status: 400 },
+    );
   }
 
   const apiKey = process.env.RESEND_API_KEY;

@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { services } from "./site-data";
+import { validateQuote, type QuoteField, type QuoteFieldErrors } from "./quote-validation";
 
 type FormState = {
   fullName: string;
@@ -30,22 +32,43 @@ const initialState: FormState = {
   website: "",
 };
 
-type Status = "idle" | "submitting" | "success" | "error";
+type Status = "idle" | "invalid" | "submitting" | "success" | "error";
 
 export default function QuoteForm() {
   const [form, setForm] = useState<FormState>(initialState);
   const [status, setStatus] = useState<Status>("idle");
+  const [errors, setErrors] = useState<QuoteFieldErrors>({});
   const isSubmittingRef = useRef(false);
 
   function updateField(field: keyof FormState) {
-    return (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setForm((previous) => ({ ...previous, [field]: event.target.value }));
+    return (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      const value = event.target.value;
+      const next = { ...form, [field]: value };
+      setForm(next);
+      if (Object.keys(errors).length > 0) {
+        const nextErrors = validateQuote(next);
+        setErrors(nextErrors);
+        if (status === "invalid") {
+          setStatus(Object.keys(nextErrors).length > 0 ? "invalid" : "idle");
+        }
+      }
     };
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (isSubmittingRef.current) return;
+    const validationErrors = validateQuote(form);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) {
+      setStatus("invalid");
+      const firstInvalidField = Object.keys(validationErrors)[0] as QuoteField;
+      const firstInvalidElement = document.getElementById(firstInvalidField);
+      firstInvalidElement?.scrollIntoView({ behavior: "smooth", block: "center" });
+      firstInvalidElement?.focus({ preventScroll: true });
+      return;
+    }
+
     isSubmittingRef.current = true;
 
     setStatus("submitting");
@@ -60,10 +83,20 @@ export default function QuoteForm() {
       const data = await response.json().catch(() => null);
 
       if (!response.ok || !data?.ok) {
+        if (response.status === 400 && data?.fields) {
+          setErrors(data.fields as QuoteFieldErrors);
+          setStatus("invalid");
+          const firstInvalidField = Object.keys(data.fields)[0] as QuoteField | undefined;
+          const firstInvalidElement = firstInvalidField ? document.getElementById(firstInvalidField) : null;
+          firstInvalidElement?.scrollIntoView({ behavior: "smooth", block: "center" });
+          firstInvalidElement?.focus({ preventScroll: true });
+          return;
+        }
         throw new Error("Request failed");
       }
 
       setForm(initialState);
+      setErrors({});
       setStatus("success");
     } catch {
       setStatus("error");
@@ -73,6 +106,16 @@ export default function QuoteForm() {
   }
 
   const isSubmitting = status === "submitting";
+  const fieldClass = (field: QuoteField) =>
+    `w-full rounded-xl border ${errors[field] ? "border-red-500" : "border-white/10"} bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none`;
+  const label = (text: string, field: QuoteField) => (
+    <label htmlFor={field} className="mb-2 block text-sm font-medium text-slate-200">
+      {text} <span className="text-red-400" aria-hidden="true">*</span>
+    </label>
+  );
+  const fieldError = (field: QuoteField) => errors[field] && (
+    <p id={`${field}-error`} className="mt-1 text-sm text-red-400">{errors[field]}</p>
+  );
 
   return (
     <form
@@ -94,46 +137,65 @@ export default function QuoteForm() {
 
       <div className="grid gap-5 md:grid-cols-2">
         <div>
-          <label htmlFor="fullName" className="mb-2 block text-sm font-medium text-slate-200">Full Name</label>
-          <input id="fullName" type="text" required maxLength={200} value={form.fullName} onChange={updateField("fullName")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Your full name" />
+          {label("Full Name", "fullName")}
+          <input id="fullName" type="text" required aria-invalid={!!errors.fullName} aria-describedby={errors.fullName ? "fullName-error" : undefined} maxLength={200} value={form.fullName} onChange={updateField("fullName")} className={fieldClass("fullName")} placeholder="Your full name" />
+          {fieldError("fullName")}
         </div>
         <div>
-          <label htmlFor="company" className="mb-2 block text-sm font-medium text-slate-200">Company / Organization</label>
-          <input id="company" type="text" maxLength={200} value={form.company} onChange={updateField("company")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Company or organization" />
+          {label("Company / Organization", "company")}
+          <input id="company" type="text" required aria-invalid={!!errors.company} aria-describedby={errors.company ? "company-error" : undefined} maxLength={200} value={form.company} onChange={updateField("company")} className={fieldClass("company")} placeholder="Company or organization" />
+          {fieldError("company")}
         </div>
         <div>
-          <label htmlFor="phone" className="mb-2 block text-sm font-medium text-slate-200">Phone Number</label>
-          <input id="phone" type="tel" maxLength={50} value={form.phone} onChange={updateField("phone")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="(239) 204-8938" />
+          {label("Phone Number", "phone")}
+          <input id="phone" type="tel" required aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-error" : undefined} maxLength={50} value={form.phone} onChange={updateField("phone")} className={fieldClass("phone")} placeholder="(239) 204-8938" />
+          {fieldError("phone")}
         </div>
         <div>
-          <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-200">Email Address</label>
-          <input id="email" type="email" required maxLength={200} value={form.email} onChange={updateField("email")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="name@email.com" />
+          {label("Email Address", "email")}
+          <input id="email" type="email" required aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} maxLength={200} value={form.email} onChange={updateField("email")} className={fieldClass("email")} placeholder="name@email.com" />
+          {fieldError("email")}
         </div>
         <div>
-          <label htmlFor="service" className="mb-2 block text-sm font-medium text-slate-200">Service Needed</label>
-          <input id="service" type="text" maxLength={200} value={form.service} onChange={updateField("service")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Armed Security" />
+          {label("Service Needed", "service")}
+          <select id="service" required aria-invalid={!!errors.service} aria-describedby={errors.service ? "service-error" : undefined} value={form.service} onChange={updateField("service")} className={fieldClass("service")}>
+            <option value="">Select a service</option>
+            {services.map((service) => <option key={service.slug} value={service.name}>{service.name}</option>)}
+          </select>
+          {fieldError("service")}
         </div>
         <div>
-          <label htmlFor="siteType" className="mb-2 block text-sm font-medium text-slate-200">Property / Site Type</label>
-          <input id="siteType" type="text" maxLength={200} value={form.siteType} onChange={updateField("siteType")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Commercial property" />
+          {label("Property / Site Type", "siteType")}
+          <input id="siteType" type="text" required aria-invalid={!!errors.siteType} aria-describedby={errors.siteType ? "siteType-error" : undefined} maxLength={200} value={form.siteType} onChange={updateField("siteType")} className={fieldClass("siteType")} placeholder="Commercial property" />
+          {fieldError("siteType")}
         </div>
         <div>
-          <label htmlFor="city" className="mb-2 block text-sm font-medium text-slate-200">City</label>
-          <input id="city" type="text" maxLength={100} value={form.city} onChange={updateField("city")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Naples" />
+          {label("City / Location", "city")}
+          <input id="city" type="text" required aria-invalid={!!errors.city} aria-describedby={errors.city ? "city-error" : undefined} maxLength={100} value={form.city} onChange={updateField("city")} className={fieldClass("city")} placeholder="Naples" />
+          {fieldError("city")}
         </div>
         <div>
-          <label htmlFor="startDate" className="mb-2 block text-sm font-medium text-slate-200">Desired Start Date</label>
-          <input id="startDate" type="date" value={form.startDate} onChange={updateField("startDate")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white focus:border-blue-500 focus:outline-none" />
+          {label("Desired Start Date", "startDate")}
+          <input id="startDate" type="date" required aria-invalid={!!errors.startDate} aria-describedby={errors.startDate ? "startDate-error" : undefined} value={form.startDate} onChange={updateField("startDate")} className={fieldClass("startDate")} />
+          {fieldError("startDate")}
         </div>
         <div className="md:col-span-2">
-          <label htmlFor="coverage" className="mb-2 block text-sm font-medium text-slate-200">Estimated Coverage / Hours</label>
-          <input id="coverage" type="text" maxLength={200} value={form.coverage} onChange={updateField("coverage")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="e.g. 12 hours / 7 days a week" />
+          {label("Estimated Coverage / Hours", "coverage")}
+          <input id="coverage" type="text" required aria-invalid={!!errors.coverage} aria-describedby={errors.coverage ? "coverage-error" : undefined} maxLength={200} value={form.coverage} onChange={updateField("coverage")} className={fieldClass("coverage")} placeholder="e.g. 12 hours / 7 days a week" />
+          {fieldError("coverage")}
         </div>
         <div className="md:col-span-2">
-          <label htmlFor="message" className="mb-2 block text-sm font-medium text-slate-200">Message / Security Needs</label>
-          <textarea id="message" required rows={5} maxLength={5000} value={form.message} onChange={updateField("message")} className="w-full rounded-xl border border-white/10 bg-[#05070A] px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none" placeholder="Tell us about the property, your security concerns, and services needed." />
+          {label("Message / Security Needs", "message")}
+          <textarea id="message" required aria-invalid={!!errors.message} aria-describedby={errors.message ? "message-error" : undefined} rows={5} maxLength={5000} value={form.message} onChange={updateField("message")} className={fieldClass("message")} placeholder="Tell us about the property, your security concerns, and services needed." />
+          {fieldError("message")}
         </div>
       </div>
+
+      {status === "invalid" && (
+        <p role="alert" className="mt-6 text-sm text-red-300">
+          Please complete all required fields before submitting your request.
+        </p>
+      )}
 
       {status === "success" && (
         <p className="mt-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
